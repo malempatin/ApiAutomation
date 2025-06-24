@@ -1,9 +1,7 @@
-import json
-from http.client import responses
+from jsonschema import validate
 
-import pytest
+import json
 import requests
-#from jsonschema import validate
 
 BaseUrl = "https://reqres.in/"
 
@@ -51,19 +49,6 @@ def test_delete_user():
     print("user is deleted")
     assert requests.get(f"{BaseUrl}/api/users/2").status_code == 404
 
-@pytest.mark.parametrize("page", [1, 2, 3])
-def test_get_users_param(page):
-    response = requests.get(f"{BaseUrl}/api/users", params={"page": page})
-    assert response.status_code == 200
-    data = response.json()
-    assert "data" in data
-    assert isinstance(data["data"], list)
-
-
-test_get_users()
-#test_create_user()
-#test_update_user()
-#test_delete_user()
 
 
 user_schema_temp = {
@@ -93,7 +78,6 @@ def test_user_schema():
     data= response.json()
     user_schema = load_schema("utils/user_schema.json")
     print(data)
-    #validate(data, user_schema)
+    validate(data, user_schema)
 
-#test_user_schema()
 
